@@ -27,5 +27,7 @@ const aeon_tensor_cache_entry_t *aeon_tensor_cache_access(aeon_tensor_cache_t *c
                                                           const aeon_model_tensor_meta_t *tensor);
 int aeon_tensor_cache_put(aeon_tensor_cache_t *cache,
                           aeon_tensor_materialization_t *materialization);
+int aeon_tensor_cache_detach(aeon_tensor_cache_t *cache,
+                             aeon_tensor_materialization_t *materialization);
 
 #endif
