@@ -19,11 +19,17 @@ int aeon_tensor_cache_materialize(aeon_tensor_cache_t *cache,
 
     entry = aeon_tensor_cache_access(cache, binding->tensor);
     if (entry != NULL) {
-        if (entry->materialization == NULL || entry->bytes != binding->bytes) return -1;
-        memcpy(materialization->buffer, entry->materialization->buffer, entry->bytes);
-        materialization->tensor = binding->tensor;
-        materialization->bytes = entry->bytes;
-        return aeon_tensor_materialization_validate(materialization);
+        if (entry->materialization == NULL || entry->bytes != binding->bytes ||
+            aeon_tensor_materialization_validate(entry->materialization) != 0 ||
+            entry->materialization->tensor != binding->tensor) {
+            (void)aeon_tensor_cache_detach(cache, entry->materialization);
+            entry = NULL;
+        } else {
+            memcpy(materialization->buffer, entry->materialization->buffer, entry->bytes);
+            materialization->tensor = binding->tensor;
+            materialization->bytes = entry->bytes;
+            return aeon_tensor_materialization_validate(materialization);
+        }
     }
 
     if (aeon_tensor_materialization_load(materialization, binding) != 0 ||
