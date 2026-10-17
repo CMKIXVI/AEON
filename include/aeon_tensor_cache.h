@@ -3,6 +3,7 @@
 
 #include <stddef.h>
 #include "aeon_tensor_materialization.h"
+#include "aeon_tensor_cache_policy.h"
 
 #define AEON_TENSOR_CACHE_MAX_ENTRIES 4u
 
@@ -22,11 +23,12 @@ typedef struct {
     unsigned age;
 } aeon_tensor_cache_entry_t;
 
-typedef struct {
+struct aeon_tensor_cache {
     aeon_tensor_cache_entry_t entries[AEON_TENSOR_CACHE_MAX_ENTRIES];
     unsigned clock;
     aeon_tensor_cache_stats_t stats;
-} aeon_tensor_cache_t;
+    aeon_tensor_cache_policy_t policy;
+};
 
 int aeon_tensor_cache_init(aeon_tensor_cache_t *cache);
 int aeon_tensor_cache_reset(aeon_tensor_cache_t *cache);
