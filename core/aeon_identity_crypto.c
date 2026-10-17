@@ -2,6 +2,7 @@
 #include <openssl/evp.h>
 #include <openssl/sha.h>
 #include <string.h>
+#include <stdio.h>
 
 int aeon_semantic_canonicalize(
     const aeon_semantic_triple_t *t, uint8_t *out, size_t cap, size_t *used)
@@ -55,6 +56,10 @@ int aeon_semantic_verify_transmission(
         !tx->auth.human_verified) return -1;
     if (!aeon_did_auth_matches_registry(registry, &tx->auth)) return -2;
     if (aeon_semantic_hash(&tx->triple, digest) != 0) return -3;
+    {
+        uint8_t zero_vc[AEON_VC_HASH_BYTES] = {0};
+        if (memcmp(tx->auth.vc_hash, zero_vc, sizeof(zero_vc)) == 0) return -3;
+    }
     if (memcmp(digest, tx->digest, 32) != 0) return -4;
     if (!verify_signature(tx->auth.public_key, tx->auth.signature, digest))
         return -5;
