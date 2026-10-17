@@ -6,7 +6,7 @@
 #include "aeon_model_stream.h"
 
 #define AEON_NVME_QUEUE_READ_MAGIC 0x41455152u
-#define AEON_NVME_QUEUE_READ_VERSION 1u
+#define AEON_NVME_QUEUE_READ_VERSION 2u
 
 typedef enum {
     AEON_NVME_READ_IDLE = 0,
@@ -28,6 +28,7 @@ typedef struct {
     uint64_t offset;
     size_t length;
     aeon_nvme_read_state_t state;
+    void *buffer;
 } aeon_nvme_queue_read_request_t;
 
 typedef struct {
@@ -42,6 +43,11 @@ int aeon_nvme_queue_read_init(aeon_nvme_queue_read_t *reader,
                               uint64_t capacity_bytes, uint32_t lba_bytes,
                               aeon_nvme_queue_read_submit_fn submit,
                               aeon_nvme_queue_read_poll_fn poll, void *context);
+int aeon_nvme_queue_read_start(aeon_nvme_queue_read_t *reader,
+                               aeon_nvme_queue_read_request_t *request,
+                               size_t offset, void *buffer, size_t length);
+int aeon_nvme_queue_read_complete(aeon_nvme_queue_read_t *reader,
+                                  aeon_nvme_queue_read_request_t *request);
 int aeon_nvme_queue_read_request(aeon_nvme_queue_read_t *reader,
                                  aeon_nvme_queue_read_request_t *request,
                                  size_t offset, void *buffer, size_t length);
