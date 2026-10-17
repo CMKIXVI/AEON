@@ -1,30 +1,32 @@
-# AEON Batch 33
+# AEON Batch 34 — Tensor Runtime
 
-## Runtime Memory Foundation
-
-Batch 33 introduces a bounded, alignment-aware runtime memory region for host-testable AEON runtime components.
+Batch 34 builds the native tensor/buffer layer on top of the Batch 33 runtime-memory substrate.
 
 ### Implemented
 
-- versioned runtime-memory ABI
-- explicit memory-region state
-- power-of-two alignment validation
-- overflow-safe aligned allocation
-- bounded allocation with no heap dependency
-- reset/reuse lifecycle
-- available-capacity reporting
-- strict C11 validation tests
+- versioned tensor ABI
+- F32/BF16/F16/I8/I16/I32 dtype sizing
+- rank and shape validation
+- overflow-safe element and byte-count calculation
+- contiguous row-major stride calculation
+- binding tensor storage to AEON runtime memory
+- tensor validation and zeroing lifecycle
+- strict C11 validation test
+
+Batch 33 runtime-memory primitives remain the backing storage layer.
 
 ### Boundary
 
-This is a runtime allocator foundation, not a physical page allocator, kernel PMM/VMM implementation, DMA allocator, IOMMU mapping layer, or NUMA manager. Those require separate hardware and kernel validation.
+This is a host-testable tensor runtime foundation. It does not claim a tokenizer, model loader, inference engine, SIMD/accelerator execution, physical DMA mapping, GPU execution or full production model runtime.
 
-### Validation target
+### Validation
 
-`-std=c11 -Wall -Wextra -Wpedantic -Werror -O2`
+`cc -std=c11 -Wall -Wextra -Wpedantic -Werror -O2`
 
-Expected result:
+Result:
 
-`AEON Batch 33 runtime memory test: PASS`
+`AEON Batch 34 tensor buffer test: PASS`
 
-Production readiness: **76%**.
+The isolated Batch 34 test was executed locally. A complete repository-suite rerun was blocked by unavailable outbound GitHub DNS/network access in the execution environment.
+
+Production readiness: **78%**.
