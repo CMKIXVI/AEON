@@ -1,5 +1,9 @@
 # AEON
 
+<p align="center">
+  <img src="./aeon-banner.png" alt="AEON — Autonomous Execution & Orchestration Network">
+</p>
+
 **AEON — Autonomous Execution & Orchestration Network** is a native, hardware-aware AI runtime/OS project being built in C with a long-term goal of running large open-weight AI models directly on PCs, workstations, servers, AI PCs and embodied/robotic hardware.
 
 > **Current status:** Batch 30 complete. Verified host-test readiness: **70%**. This readiness figure is a development tracking metric, not a claim that 70% of the eventual OS is implemented. Hardware execution is separately validated and is not claimed where it has not been performed.
