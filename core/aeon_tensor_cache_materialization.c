@@ -22,7 +22,10 @@ int aeon_tensor_cache_materialize(aeon_tensor_cache_t *cache,
         if (entry->materialization == NULL || entry->bytes != binding->bytes ||
             aeon_tensor_materialization_validate(entry->materialization) != 0 ||
             entry->materialization->tensor != binding->tensor) {
-            (void)aeon_tensor_cache_detach(cache, entry->materialization);
+            (void)aeon_tensor_cache_record_stale(cache);
+            if (entry->materialization != NULL) {
+                (void)aeon_tensor_cache_detach(cache, entry->materialization);
+            }
             entry = NULL;
         } else {
             memcpy(materialization->buffer, entry->materialization->buffer, entry->bytes);
