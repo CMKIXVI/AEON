@@ -4,7 +4,7 @@ LDLIBS ?= -lcrypto
 
 all: test
 
-test: aeon_batch31_test aeon_batch32_test aeon_batch33_test aeon_batch34_test aeon_batch35_test aeon_batch36_test aeon_batch37_test aeon_batch38_test aeon_batch39_test aeon_batch40_test aeon_batch41_test aeon_batch42_test aeon_batch43_test aeon_batch44_test aeon_batch45_test aeon_batch46_test aeon_batch47_test aeon_batch49_test
+test: aeon_batch31_test aeon_batch32_test aeon_batch33_test aeon_batch34_test aeon_batch35_test aeon_batch36_test aeon_batch37_test aeon_batch38_test aeon_batch39_test aeon_batch40_test aeon_batch41_test aeon_batch42_test aeon_batch43_test aeon_batch44_test aeon_batch45_test aeon_batch46_test aeon_batch47_test aeon_batch49_test aeon_batch50_test
 	./aeon_batch31_test
 	./aeon_batch32_test
 	./aeon_batch33_test
@@ -23,6 +23,7 @@ test: aeon_batch31_test aeon_batch32_test aeon_batch33_test aeon_batch34_test ae
 	./aeon_batch46_test
 	./aeon_batch47_test
 	./aeon_batch49_test
+	./aeon_batch50_test
 
 aeon_batch31_test: core/aeon_identity.c core/aeon_identity_crypto.c core/aeon_syscall.c core/aeon_friction.c core/aeon_io_gate.c core/aeon_process_gate.c core/aeon_ebpf_boundary.c core/aeon_kernel_device.c core/aeon_net_policy.c core/aeon_kernel_adapter.c core/aeon_semantic_frame.c core/aeon_semantic_gate.c tests/test_batch31.c
 	$(CC) $(CFLAGS) $^ -o $@ $(LDLIBS)
@@ -78,5 +79,8 @@ aeon_batch47_test: core/aeon_tensor_materialization.c core/aeon_tensor_cache.c t
 aeon_batch49_test: core/aeon_tensor_materialization.c core/aeon_tensor_cache.c tests/test_batch49.c
 	$(CC) $(CFLAGS) $^ -o $@ $(LDLIBS)
 
+aeon_batch50_test: core/aeon_model_index.c core/aeon_model_stream.c core/aeon_tensor_layout.c core/aeon_tensor_binding.c core/aeon_tensor_materialization.c tests/test_batch50.c
+	$(CC) $(CFLAGS) $^ -o $@ $(LDLIBS)
+
 clean:
-	rm -f aeon_batch31_test aeon_batch32_test aeon_batch33_test aeon_batch34_test aeon_batch35_test aeon_batch36_test aeon_batch37_test aeon_batch38_test aeon_batch39_test aeon_batch40_test aeon_batch41_test aeon_batch42_test aeon_batch43_test aeon_batch44_test aeon_batch45_test aeon_batch46_test aeon_batch47_test aeon_batch49_test
+	rm -f aeon_batch31_test aeon_batch32_test aeon_batch33_test aeon_batch34_test aeon_batch35_test aeon_batch36_test aeon_batch37_test aeon_batch38_test aeon_batch39_test aeon_batch40_test aeon_batch41_test aeon_batch42_test aeon_batch43_test aeon_batch44_test aeon_batch45_test aeon_batch46_test aeon_batch47_test aeon_batch49_test aeon_batch50_test
