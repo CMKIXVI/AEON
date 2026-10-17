@@ -10,6 +10,7 @@ Makes tensor-cache ownership explicit. Cache entries borrow materialization obje
 - Detach clears the cache entry instead of leaving a stale materialization pointer.
 - Cache reset/invalidation remains available for bulk lifetime transitions.
 - Adds a focused regression test for detach-before-reuse.
+- Fixes tensor-layout link dependencies for cache/materialization tests after Batch 50 validation became layout-aware.
 
 ## Ownership rule
 
