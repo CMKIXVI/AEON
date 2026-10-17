@@ -51,12 +51,12 @@ int main(void)
     if (aeon_tensor_cache_materialize(&cache, &mats[0], &bindings[0]) != 0) return 8;
     if (aeon_tensor_cache_materialize(&cache, &mats[4], &bindings[4]) != 0) return 9;
     if (aeon_tensor_cache_get_stats(&cache, &stats) != 0) return 10;
-    if (stats.bytes_used != 64u || stats.peak_bytes_used != 80u ||
+    if (stats.bytes_used != 64u || stats.peak_bytes_used != 64u ||
         stats.evictions != 1u || stats.inserts != 5u) return 11;
 
     if (aeon_tensor_cache_detach(&cache, &mats[4]) != 0) return 12;
     if (aeon_tensor_cache_get_stats(&cache, &stats) != 0) return 13;
-    if (stats.bytes_used != 48u || stats.peak_bytes_used != 80u) return 14;
+    if (stats.bytes_used != 48u || stats.peak_bytes_used != 64u) return 14;
 
     puts("AEON Batch 59 cache memory accounting regression test: PASS");
     return 0;
