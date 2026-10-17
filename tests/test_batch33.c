@@ -3,7 +3,7 @@
 #include <stdint.h>
 #include <stdio.h>
 
-static uint8_t buffer[4096] __attribute__((aligned(64)));
+_Alignas(64) static uint8_t buffer[4096];
 
 int main(void)
 {
