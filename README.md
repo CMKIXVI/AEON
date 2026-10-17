@@ -8,11 +8,11 @@ AEON is a native AI runtime/OS foundation being developed in C for autonomous ex
 
 ## Current status
 
-**Batch 32 — 74% production readiness**
+**Batch 34 — 78% production readiness**
 
-Batch 32 adds a deterministic semantic wire codec with explicit versioning, bounds checks and big-endian integer encoding. It also hardens the process-gate ABI by removing the unsafe cast between the ioctl payload and the internal submit ABI.
+Batch 34 connects the bounded runtime-memory substrate to a native tensor/buffer layer with dtype sizing, shape validation, overflow-safe byte sizing, contiguous strides, memory binding and zeroing.
 
-The 74% figure is an engineering readiness estimate for the implemented scope, not a claim that AEON is a finished production operating system. Physical kernel/eBPF/netfilter attachment, hardware network interception and other hardware-level validation remain future work.
+The 78% figure is an engineering readiness estimate for the implemented scope, not a claim that AEON is a finished production operating system. Physical kernel/eBPF/netfilter attachment, hardware network interception, physical memory management, IOMMU/DMA mapping, accelerator execution and full model inference remain future work.
 
 ## Build and test
 
@@ -32,6 +32,8 @@ Expected results:
 ```text
 AEON Batch 31 authenticated semantic transmission test: PASS
 AEON Batch 32 semantic wire codec test: PASS
+AEON Batch 33 runtime memory test: PASS
+AEON Batch 34 tensor buffer test: PASS
 ```
 
 ## Architecture
@@ -40,7 +42,9 @@ AEON Batch 32 semantic wire codec test: PASS
 AEON
 ├── Cognitive Engine
 ├── Model Runtime
+│   └── Tensor / Buffer Layer
 ├── Compute Engine
+├── Runtime Memory
 ├── Storage Engine
 ├── System / UEFI / Kernel
 ├── Network
@@ -66,4 +70,4 @@ Host-testable code is deliberately distinguished from claims of a bootable/hardw
 
 ## Roadmap
 
-Next engineering stages continue from semantic wire transport toward native kernel I/O enforcement, hardware network interception, model runtime, cognitive execution and robotics/embodied AI integration.
+Next stages continue from tensor buffers toward tensor views/layouts, model-weight storage/streaming, tokenizer/runtime primitives, SIMD kernels, inference execution, physical memory integration, kernel I/O enforcement and robotics/embodied AI integration.

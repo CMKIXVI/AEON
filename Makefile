@@ -1,50 +1,33 @@
 CC ?= cc
 CFLAGS ?= -std=c11 -Wall -Wextra -Wpedantic -Werror -O2 -Iinclude
 LDLIBS ?= -lcrypto
+all: test
+test: aeon_batch31_test aeon_batch32_test aeon_batch33_test aeon_batch34_test
+	./aeon_batch31_test
+	./aeon_batch32_test
+	./aeon_batch33_test
+	./aeon_batch34_test
 
-BATCH30_TEST = aeon_batch30_test
-BATCH30_SRC = \
-	core/aeon_identity.c core/aeon_identity_crypto.c core/aeon_syscall.c \
-	core/aeon_friction.c core/aeon_io_gate.c core/aeon_process_gate.c \
-	core/aeon_ebpf_boundary.c core/aeon_kernel_device.c core/aeon_net_policy.c \
-	core/aeon_kernel_adapter.c core/aeon_semantic_frame.c core/aeon_semantic_gate.c \
-	tests/test_batch30.c
+aeon_batch31_test: core/aeon_identity.c core/aeon_identity_crypto.c \
+	core/aeon_syscall.c core/aeon_friction.c core/aeon_io_gate.c \
+	core/aeon_process_gate.c core/aeon_ebpf_boundary.c \
+	core/aeon_kernel_device.c core/aeon_net_policy.c \
+	core/aeon_kernel_adapter.c core/aeon_semantic_frame.c core/aeon_semantic_gate.c tests/test_batch31.c
+	$(CC) $(CFLAGS) $^ -o $@ $(LDLIBS)
 
-BATCH31_TEST = aeon_batch31_test
-BATCH31_SRC = \
-	core/aeon_identity.c core/aeon_identity_crypto.c core/aeon_syscall.c \
-	core/aeon_friction.c core/aeon_io_gate.c core/aeon_process_gate.c \
-	core/aeon_ebpf_boundary.c core/aeon_kernel_device.c core/aeon_net_policy.c \
-	core/aeon_kernel_adapter.c core/aeon_semantic_frame.c core/aeon_semantic_gate.c \
-	tests/test_batch31.c
-
-BATCH32_TEST = aeon_batch32_test
-BATCH32_SRC = \
-	core/aeon_identity.c core/aeon_identity_crypto.c core/aeon_syscall.c \
-	core/aeon_friction.c core/aeon_io_gate.c core/aeon_process_gate.c \
-	core/aeon_ebpf_boundary.c core/aeon_kernel_device.c core/aeon_net_policy.c \
+aeon_batch32_test: core/aeon_identity.c core/aeon_identity_crypto.c \
+	core/aeon_syscall.c core/aeon_friction.c core/aeon_io_gate.c \
+	core/aeon_process_gate.c core/aeon_ebpf_boundary.c \
+	core/aeon_kernel_device.c core/aeon_net_policy.c \
 	core/aeon_kernel_adapter.c core/aeon_semantic_frame.c core/aeon_semantic_gate.c \
 	core/aeon_semantic_wire.c tests/test_batch32.c
-
-.PHONY: all test clean batch30-test batch31-test batch32-test
-all: test
-
-test: batch30-test batch31-test batch32-test
-
-batch30-test: $(BATCH30_TEST)
-	./$(BATCH30_TEST)
-$(BATCH30_TEST): $(BATCH30_SRC)
 	$(CC) $(CFLAGS) $^ -o $@ $(LDLIBS)
 
-batch31-test: $(BATCH31_TEST)
-	./$(BATCH31_TEST)
-$(BATCH31_TEST): $(BATCH31_SRC)
+aeon_batch33_test: core/aeon_runtime_memory.c tests/test_batch33.c
 	$(CC) $(CFLAGS) $^ -o $@ $(LDLIBS)
 
-batch32-test: $(BATCH32_TEST)
-	./$(BATCH32_TEST)
-$(BATCH32_TEST): $(BATCH32_SRC)
+aeon_batch34_test: core/aeon_runtime_memory.c core/aeon_tensor.c tests/test_batch34.c
 	$(CC) $(CFLAGS) $^ -o $@ $(LDLIBS)
 
 clean:
-	rm -f $(BATCH30_TEST) $(BATCH31_TEST) $(BATCH32_TEST)
+	rm -f aeon_batch31_test aeon_batch32_test aeon_batch33_test aeon_batch34_test
