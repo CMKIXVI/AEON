@@ -1,5 +1,6 @@
 #include "aeon_tensor_binding.h"
 
+#include <stdint.h>
 #include <limits.h>
 
 int aeon_tensor_binding_validate(const aeon_tensor_binding_t *binding)
@@ -29,7 +30,6 @@ int aeon_tensor_binding_init(aeon_tensor_binding_t *binding,
 
     if (binding == NULL || stream == NULL || index == NULL || name == NULL ||
         aeon_model_stream_validate(stream) != 0 ||
-        stream->total_bytes > UINT64_MAX ||
         aeon_model_index_validate(index, (uint64_t)stream->total_bytes) != 0) {
         return -1;
     }
