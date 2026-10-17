@@ -1,8 +1,8 @@
-# AEON Batch 34 — Tensor Runtime Layer
+# AEON Batch 34 — Native Tensor Buffer Runtime
 
 ## Objective
 
-Connect the bounded runtime-memory substrate to a native tensor/buffer abstraction for future model-runtime execution.
+Connect the bounded Batch 33 runtime-memory substrate to a native tensor/buffer abstraction for future model-runtime execution.
 
 ## Implemented
 
@@ -12,12 +12,8 @@ Connect the bounded runtime-memory substrate to a native tensor/buffer abstracti
 - overflow-safe element and byte-count calculation
 - contiguous row-major stride calculation
 - binding tensor storage to AEON runtime memory
-- zeroing and validation lifecycle
+- tensor validation and zeroing lifecycle
 - strict C11 test coverage
-
-## Boundary
-
-This is a host-testable tensor memory layer. It does not claim a model loader, tokenizer, accelerator backend, SIMD kernel, physical DMA mapping, GPU execution or full inference runtime.
 
 ## Validation
 
@@ -26,5 +22,11 @@ This is a host-testable tensor memory layer. It does not claim a model loader, t
 Result:
 
 `AEON Batch 34 tensor buffer test: PASS`
+
+The Batch 34 test pair was independently compiled and executed locally. The complete repository suite could not be rerun in the isolated environment because outbound GitHub DNS/network access was unavailable.
+
+## Boundary
+
+This is a host-testable tensor memory layer. It does not claim a tokenizer, model loader, inference engine, SIMD/accelerator execution, physical DMA mapping, GPU/NPU execution or full production model runtime.
 
 Production readiness: **78%**.
