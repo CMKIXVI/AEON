@@ -1,23 +1,34 @@
-# AEON Batch 32
+# AEON Batch 33
 
-Deterministic semantic wire transport and ABI hardening.
+Runtime memory foundation for native model-runtime and cognitive-execution components.
 
 Verified:
 - Batch 31 authenticated semantic transmission remains passing
-- deterministic semantic frame wire encoding
-- explicit wire magic and version
-- big-endian integer representation
-- bounded length-prefixed strings
-- decode rejects malformed/truncated/extra bytes
-- round-trip preservation of authenticated frame fields
-- process-gate ABI conversion without unsafe struct casting
-- strict C11, warnings-as-errors build and test
+- Batch 32 deterministic semantic wire transport and ABI hardening remain passing
+- versioned runtime-memory ABI
+- explicit memory-region state
+- power-of-two alignment validation
+- overflow-safe bounded allocation
+- reset/reuse lifecycle
+- available-capacity reporting
+- strict C11, warnings-as-errors Batch 33 validation
+
+Validation command used for the Batch 33 allocator/test pair:
+
+`cc -std=c11 -Wall -Wextra -Wpedantic -Werror -O2`
+
+Result:
+
+`AEON Batch 33 runtime memory test: PASS`
 
 Not claimed:
+- physical page allocator / PMM
+- physical VMM integration
+- IOMMU/DMA mapping
+- NUMA-aware allocation
 - physical kernel/eBPF/netfilter attachment
 - physical packet interception
 - kernel-space cryptographic execution
-- hardware network validation
 - biological-humanity proof from cryptography alone
 
-Production readiness: 74%
+Production readiness: 76%
