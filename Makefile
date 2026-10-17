@@ -104,7 +104,7 @@ aeon_batch53_test: core/aeon_model_index.c core/aeon_model_stream.c core/aeon_te
 aeon_batch55_test: core/aeon_model_index.c core/aeon_model_stream.c core/aeon_tensor_layout.c core/aeon_tensor_binding.c core/aeon_tensor_materialization.c core/aeon_tensor_cache.c core/aeon_tensor_cache_materialization.c tests/test_batch55.c
 	$(CC) $(CFLAGS) $^ -o $@ $(LDLIBS)
 
-aeon_batch56_test: core/aeon_model_index.c core/aeon_model_stream.c core/aeon_tensor_layout.c core/aeon_tensor_materialization.c core/aeon_tensor_cache.c tests/test_batch56.c
+aeon_batch56_test: core/aeon_model_index.c core/aeon_model_stream.c core/aeon_tensor_layout.c core/aeon_tensor_binding.c core/aeon_tensor_materialization.c core/aeon_tensor_cache.c core/aeon_tensor_cache_materialization.c tests/test_batch56.c
 	$(CC) $(CFLAGS) $^ -o $@ $(LDLIBS)
 
 aeon_batch57_test: core/aeon_tensor_cache.c tests/test_batch57.c
