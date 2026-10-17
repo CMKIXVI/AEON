@@ -23,6 +23,8 @@ Result:
 
 `AEON Batch 34 tensor buffer test: PASS`
 
+The full repository suite was not rerun after Batch 34 because outbound GitHub DNS/network access was unavailable in the execution environment. The new Batch 34 test pair was independently compiled and executed successfully.
+
 Not claimed:
 - tokenizer or model loader
 - model inference execution
