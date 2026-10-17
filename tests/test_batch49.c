@@ -6,6 +6,9 @@ static int init_materialization(aeon_tensor_materialization_t *materialization,
                                 aeon_model_tensor_meta_t *tensor,
                                 uint8_t *buffer)
 {
+    tensor->dtype = AEON_MODEL_DTYPE_F32;
+    tensor->rank = 1u;
+    tensor->shape[0] = 2u;
     tensor->bytes = 8u;
     if (aeon_tensor_materialization_init(materialization, buffer, 8u) != 0) return -1;
     materialization->tensor = tensor;
