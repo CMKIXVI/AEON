@@ -44,6 +44,7 @@ int aeon_tensor_cache_put(aeon_tensor_cache_t *cache,
                           aeon_tensor_materialization_t *materialization);
 int aeon_tensor_cache_detach(aeon_tensor_cache_t *cache,
                              aeon_tensor_materialization_t *materialization);
+int aeon_tensor_cache_validate(const aeon_tensor_cache_t *cache);
 int aeon_tensor_cache_get_stats(const aeon_tensor_cache_t *cache,
                                 aeon_tensor_cache_stats_t *stats);
 int aeon_tensor_cache_record_stale(aeon_tensor_cache_t *cache);
