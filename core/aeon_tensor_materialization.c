@@ -2,6 +2,8 @@
 
 #include <stdint.h>
 
+#include "aeon_tensor_layout.h"
+
 int aeon_tensor_materialization_validate(const aeon_tensor_materialization_t *materialization)
 {
     if (materialization == NULL || materialization->buffer == NULL ||
@@ -10,7 +12,8 @@ int aeon_tensor_materialization_validate(const aeon_tensor_materialization_t *ma
         materialization->tensor == NULL) {
         return -1;
     }
-    if (materialization->tensor->bytes != (uint64_t)materialization->bytes) {
+    if (aeon_tensor_layout_validate(materialization->tensor) != 0 ||
+        materialization->tensor->bytes != (uint64_t)materialization->bytes) {
         return -1;
     }
     return 0;
@@ -51,7 +54,8 @@ int aeon_tensor_materialization_load(aeon_tensor_materialization_t *materializat
         return -1;
     }
     bytes = binding->bytes;
-    if (bytes == 0u || bytes > materialization->capacity || binding->tensor == NULL) {
+    if (bytes == 0u || bytes > materialization->capacity || binding->tensor == NULL ||
+        aeon_tensor_layout_validate(binding->tensor) != 0) {
         return -1;
     }
     if (aeon_tensor_binding_seek(binding, 0u) != 0 ||
