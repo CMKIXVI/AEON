@@ -29,7 +29,9 @@ int main(void)
     assert(aeon_model_stream_read(&stream, aeon_nvme_storage_read,
                                   &storage, output, sizeof(output)) == 0);
     assert(memcmp(output, disk + 8u, sizeof(output)) == 0);
-    assert(aeon_model_stream_seek(&stream, 6u) != 0);
+    assert(aeon_model_stream_seek(&stream, 6u) == 0);
+    assert(aeon_model_stream_read(&stream, aeon_nvme_storage_read,
+                                  &storage, output, 4u) != 0);
     assert(aeon_nvme_storage_read(&storage, 28u, output, 8u) != 0);
     return 0;
 }
