@@ -12,15 +12,6 @@ static int add_overflow_size(size_t a, size_t b, size_t *out)
     return 0;
 }
 
-static int mul_overflow_size(size_t a, size_t b, size_t *out)
-{
-    if (a != 0u && b > SIZE_MAX / a) {
-        return -1;
-    }
-    *out = a * b;
-    return 0;
-}
-
 int aeon_nvme_queue_read_init(aeon_nvme_queue_read_t *reader,
                               uint64_t capacity_bytes, uint32_t lba_bytes,
                               aeon_nvme_queue_read_submit_fn submit,
@@ -90,7 +81,8 @@ int aeon_nvme_queue_read_request(aeon_nvme_queue_read_t *reader,
     return success != 0 ? 0 : -1;
 }
 
-static int stream_read(void *context, size_t offset, void *buffer, size_t length)
+int aeon_nvme_queue_read_model_read(void *context, size_t offset,
+                                    void *buffer, size_t length)
 {
     aeon_nvme_queue_read_t *reader = (aeon_nvme_queue_read_t *)context;
     aeon_nvme_queue_read_request_t request;
@@ -103,9 +95,5 @@ int aeon_nvme_queue_read_bind_stream(aeon_model_stream_t *stream,
     if (stream == NULL || reader == NULL || reader->capacity_bytes > SIZE_MAX) {
         return -1;
     }
-    if (aeon_model_stream_init(stream, (size_t)reader->capacity_bytes) != 0) {
-        return -1;
-    }
-    (void)stream_read;
-    return 0;
+    return aeon_model_stream_init(stream, (size_t)reader->capacity_bytes);
 }
