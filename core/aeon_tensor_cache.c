@@ -33,6 +33,7 @@ int aeon_tensor_cache_init(aeon_tensor_cache_t *cache)
 {
     if (cache == NULL) return -1;
     *cache = (aeon_tensor_cache_t){0};
+    cache->policy = AEON_TENSOR_CACHE_POLICY_LRU;
     return 0;
 }
 
@@ -45,7 +46,23 @@ int aeon_tensor_cache_reset(aeon_tensor_cache_t *cache)
     }
     cache->clock = 0u;
     cache->stats = (aeon_tensor_cache_stats_t){0};
+    cache->policy = AEON_TENSOR_CACHE_POLICY_LRU;
     return 0;
+}
+
+int aeon_tensor_cache_set_policy(aeon_tensor_cache_t *cache,
+                                 aeon_tensor_cache_policy_t policy)
+{
+    if (cache == NULL) return -1;
+    if (policy != AEON_TENSOR_CACHE_POLICY_LRU) return -2;
+    cache->policy = policy;
+    return 0;
+}
+
+aeon_tensor_cache_policy_t aeon_tensor_cache_get_policy(const aeon_tensor_cache_t *cache)
+{
+    if (cache == NULL) return AEON_TENSOR_CACHE_POLICY_LRU;
+    return cache->policy;
 }
 
 const aeon_tensor_cache_entry_t *aeon_tensor_cache_find(
@@ -83,6 +100,8 @@ int aeon_tensor_cache_put(aeon_tensor_cache_t *cache,
         (void)aeon_tensor_cache_access(cache, materialization->tensor);
         return 0;
     }
+
+    if (cache->policy != AEON_TENSOR_CACHE_POLICY_LRU) return -2;
 
     for (i = 0u; i < AEON_TENSOR_CACHE_MAX_ENTRIES; ++i) {
         if (!cache->entries[i].valid) { slot = i; break; }
