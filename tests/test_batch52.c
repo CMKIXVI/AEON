@@ -28,6 +28,7 @@ int main(void)
     if (aeon_tensor_cache_find(&cache, &tensor) != NULL) return 7;
     if (aeon_tensor_cache_detach(&cache, &materialization) != 1) return 8;
 
+    if (aeon_tensor_materialization_reset(&materialization) != 0) return 9;
     puts("AEON Batch 52 tensor cache lifetime test: PASS");
     return 0;
 }
