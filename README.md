@@ -1,8 +1,106 @@
 # AEON
 
-**AEON — Autonomous Execution & Orchestration Network** is a native, hardware-aware AI runtime/OS project being built in C/C with a long-term goal of running large open-weight AI models directly on PC, workstation, server, AI-PC and embodied/robotic hardware.
+**AEON — Autonomous Execution & Orchestration Network** is a native, hardware-aware AI runtime/OS project being built in C with a long-term goal of running large open-weight AI models directly on PCs, workstations, servers, AI PCs and embodied/robotic hardware.
 
-> **Current status:** Batch 30 complete. Verified host-test readiness: **70%**. The repository contains the consolidated source from the verified AEON batches through Batch 30. Hardware execution is still a separate validation stage and is explicitly not claimed where it has not been performed.
+> **Current status:** Batch 30 complete. Verified host-test readiness: **70%**. This readiness figure is a development tracking metric, not a claim that 70% of the eventual OS is implemented. Hardware execution is separately validated and is not claimed where it has not been performed.
+
+## Installation & Setup
+
+### 1. Install prerequisites
+
+#### Ubuntu / Debian
+
+```bash
+sudo apt update
+sudo apt install -y git build-essential libssl-dev
+```
+
+#### Fedora / RHEL-family
+
+```bash
+sudo dnf install -y git gcc make openssl-devel
+```
+
+#### macOS
+
+Install Xcode Command Line Tools and Git:
+
+```bash
+xcode-select --install
+```
+
+If Homebrew is installed:
+
+```bash
+brew install git
+```
+
+#### Windows
+
+Install Git for Windows and use Git Bash, MSYS2, WSL, or another C11-compatible development environment. The current validated host-test path is primarily Linux/x86-64.
+
+### 2. Clone AEON
+
+```bash
+git clone https://github.com/CMKIXVI/AEON.git
+cd AEON
+```
+
+### 3. Verify the development tools
+
+```bash
+git --version
+gcc --version
+make --version
+```
+
+AEON's current host validation requires a C11 compiler and OpenSSL `libcrypto` development support.
+
+### 4. Build
+
+```bash
+make clean
+make
+```
+
+The host validation build uses strict compiler settings:
+
+```text
+-std=c11 -Wall -Wextra -Wpedantic -Werror -O2
+```
+
+Warnings are treated as errors.
+
+### 5. Run the tests
+
+```bash
+make test
+```
+
+The current verified Batch 30 test should report:
+
+```text
+AEON Batch 30 semantic payload gate test: PASS
+```
+
+### 6. Clean generated files
+
+```bash
+make clean
+```
+
+### Important: development build vs bootable AEON
+
+The commands above build and validate the **current host-testable AEON development baseline**. They do **not** yet install AEON as a bootable operating system on a physical machine.
+
+The bootable installation path will be introduced only after the real:
+
+```text
+UEFI → bootloader → AEON kernel → memory → interrupts/SMP
+     → PCIe → NVMe → drivers → runtime
+```
+
+path has been implemented and hardware/QEMU validated. AEON does not claim bootable OS functionality before that validation is complete.
 
 ## Architecture
 
@@ -72,7 +170,7 @@ The latest completed batch is **Batch 30**. The verified work includes:
 - kernel-device/ioctl boundary model
 - eBPF-compatible event classification boundary
 
-### Security boundary
+## Security boundary
 
 AEON's identity layer can require a configured DID identity, VC hash, Ed25519 signature and Proof-of-Friction attestation before a semantic transmission is permitted by the current host-testable policy path.
 
@@ -82,72 +180,13 @@ The current Web3/IPFS/ORE structures are protocol-neutral data structures. A pro
 
 Likewise, the current eBPF/netfilter code is an enforcement-compatible boundary/model. It does **not** claim that a real kernel eBPF program or netfilter hook has already been attached to a running production kernel.
 
-## Build requirements
-
-The current host validation path uses:
-
-- C11 compiler (`gcc` or `clang`)
-- `make`
-- OpenSSL development headers/library (`libcrypto`)
-- x86-64 host recommended for the architecture-oriented portions
-
-Ubuntu/Debian example:
-
-```bash
-sudo apt update
-sudo apt install build-essential libssl-dev
-```
-
-Fedora/RHEL-family example:
-
-```bash
-sudo dnf install gcc make openssl-devel
-```
-
-## Quick start
-
-Clone the repository:
-
-```bash
-git clone https://github.com/CMKIXVI/AEON.git
-cd AEON
-```
-
-Run the currently verified Batch 30 host test:
-
-```bash
-make test
-```
-
-The expected result is:
-
-```text
-AEON Batch 30 semantic payload gate test: PASS
-```
-
-Clean generated test binaries:
-
-```bash
-make clean
-```
-
-## Strict build
-
-The project intentionally uses strict warnings for the host validation path:
-
-```text
--std=c11 -Wall -Wextra -Wpedantic -Werror -O2
-```
-
-Do not treat a warning-producing build as production-ready. A batch is considered released only after its defined validation path passes.
-
 ## Development workflow
 
 1. Work in a feature branch.
 2. Keep kernel/driver/security boundaries explicit.
-3. Add a host-side deterministic test for every new subsystem boundary.
+3. Add a deterministic host-side test for every new subsystem boundary.
 4. Build with `-Werror`.
-5. Do not claim hardware validation without executing on the target hardware or a suitable hardware emulator.
+5. Do not claim hardware validation without executing on target hardware or a suitable emulator.
 6. Update the production-readiness record only after tests pass.
 7. Keep failed batches out of the released baseline.
 
@@ -163,7 +202,7 @@ See:
 
 ## Roadmap
 
-The major remaining work includes:
+Major remaining work includes:
 
 - real boot-to-kernel execution on hardware/QEMU
 - physical APIC/interrupt/SMP validation
