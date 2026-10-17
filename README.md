@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="./aeon-banner.png" alt="AEON — Autonomous Execution & Orchestration Network">
+  <img src="./aeon-banner.png" alt="AEON — Autonomous Engine, Orchestrator & Node">
 </p>
 
-# AEON — Autonomous Execution & Orchestration Network
+# AEON — Autonomous Engine, Orchestrator & Node
 
 AEON is a native AI runtime/OS foundation being developed in C for autonomous execution, model runtime, compute, storage, networking, hardware control, robotics and secure AI I/O.
 
