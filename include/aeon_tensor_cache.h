@@ -23,6 +23,8 @@ int aeon_tensor_cache_init(aeon_tensor_cache_t *cache);
 int aeon_tensor_cache_reset(aeon_tensor_cache_t *cache);
 const aeon_tensor_cache_entry_t *aeon_tensor_cache_find(const aeon_tensor_cache_t *cache,
                                                         const aeon_model_tensor_meta_t *tensor);
+const aeon_tensor_cache_entry_t *aeon_tensor_cache_access(aeon_tensor_cache_t *cache,
+                                                          const aeon_model_tensor_meta_t *tensor);
 int aeon_tensor_cache_put(aeon_tensor_cache_t *cache,
                           aeon_tensor_materialization_t *materialization);
 
