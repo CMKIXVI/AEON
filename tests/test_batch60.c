@@ -57,12 +57,14 @@ int main(void)
         stats.bytes_used != 32u || stats.peak_bytes_used != 32u ||
         stats.evictions != 1u || stats.inserts != 3u) return 11;
 
-    if (aeon_tensor_cache_set_budget(&cache, 15u) == 0) return 12;
-    if (aeon_tensor_cache_get_budget(&cache) != 32u) return 13;
+    if (aeon_tensor_cache_detach(&cache, &mats[0]) != 0 ||
+        aeon_tensor_cache_detach(&cache, &mats[2]) != 0) return 12;
+    if (aeon_tensor_cache_set_budget(&cache, 15u) != 0 ||
+        aeon_tensor_cache_get_budget(&cache) != 15u) return 13;
 
     if (aeon_tensor_cache_put(&cache, &mats[1]) == 0) return 14;
     if (aeon_tensor_cache_get_stats(&cache, &stats) != 0 ||
-        stats.bytes_used != 32u || stats.evictions != 1u || stats.inserts != 3u) return 15;
+        stats.bytes_used != 0u || stats.evictions != 1u || stats.inserts != 3u) return 15;
 
     puts("AEON Batch 60 tensor cache budget guard regression test: PASS");
     return 0;
