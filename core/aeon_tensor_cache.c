@@ -92,3 +92,19 @@ int aeon_tensor_cache_put(aeon_tensor_cache_t *cache,
     aeon_tensor_cache_tick(cache, slot);
     return 0;
 }
+
+int aeon_tensor_cache_detach(aeon_tensor_cache_t *cache,
+                             aeon_tensor_materialization_t *materialization)
+{
+    unsigned i;
+
+    if (cache == NULL || materialization == NULL) return -1;
+    for (i = 0u; i < AEON_TENSOR_CACHE_MAX_ENTRIES; ++i) {
+        if (cache->entries[i].valid &&
+            cache->entries[i].materialization == materialization) {
+            cache->entries[i] = (aeon_tensor_cache_entry_t){0};
+            return 0;
+        }
+    }
+    return 1;
+}
