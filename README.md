@@ -1,24 +1,23 @@
 <p align="center">
-  <img src="./aeon-banner.png" alt="AEON — Autonomous Execution & Orchestration Network">
+  <img src="./aeon-banner.png" alt="AEON — Autonomous Engine, Orchestrator & Node">
 </p>
 
-# AEON — Autonomous Execution & Orchestration Network
+# AEON — Autonomous Engine, Orchestrator & Node
 
 AEON is a native AI runtime/OS foundation being developed in C for autonomous execution, model runtime, compute, storage, networking, hardware control, robotics and secure AI I/O.
 
 ## Current status
 
-**Batch 31 — 72% production readiness**
+**Batch 32 — 74% production readiness**
 
-Batch 31 adds authenticated semantic transmission: DID identity binding, Ed25519 signatures, VC-hash presence, Proof-of-Friction attestation, IPFS reference validation, semantic SHA-256 integrity and network pre-TX ACCEPT/DROP enforcement.
+Batch 32 adds a deterministic semantic wire codec with explicit versioning, bounds checks and big-endian integer encoding. It also hardens the process-gate ABI by removing the unsafe cast between the ioctl payload and the internal submit ABI.
 
-The 72% figure is an engineering readiness estimate for the implemented scope, not a claim that AEON is a finished production operating system. Physical kernel/eBPF/netfilter attachment, hardware network interception and other hardware-level validation remain future work.
+The 74% figure is an engineering readiness estimate for the implemented scope, not a claim that AEON is a finished production operating system. Physical kernel/eBPF/netfilter attachment, hardware network interception and other hardware-level validation remain future work.
 
 ## Build and test
 
 ```bash
 make clean
-make
 make test
 ```
 
@@ -28,10 +27,11 @@ Strict baseline:
 -std=c11 -Wall -Wextra -Wpedantic -Werror -O2
 ```
 
-Expected Batch 31 result:
+Expected results:
 
 ```text
 AEON Batch 31 authenticated semantic transmission test: PASS
+AEON Batch 32 semantic wire codec test: PASS
 ```
 
 ## Architecture
@@ -66,4 +66,4 @@ Host-testable code is deliberately distinguished from claims of a bootable/hardw
 
 ## Roadmap
 
-Next engineering stages continue from authenticated semantic transmission toward actual kernel I/O enforcement, hardware network interception, model runtime, cognitive execution and robotics/embodied AI integration.
+Next engineering stages continue from semantic wire transport toward native kernel I/O enforcement, hardware network interception, model runtime, cognitive execution and robotics/embodied AI integration.
