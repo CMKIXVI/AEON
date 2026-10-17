@@ -1,8 +1,10 @@
 CC ?= cc
 CFLAGS ?= -std=c11 -Wall -Wextra -Wpedantic -Werror -O2 -Iinclude
 LDLIBS ?= -lcrypto
+
 all: test
-test: aeon_batch31_test aeon_batch32_test aeon_batch33_test aeon_batch34_test aeon_batch35_test aeon_batch36_test aeon_batch37_test aeon_batch38_test aeon_batch39_test aeon_batch40_test
+
+test: aeon_batch31_test aeon_batch32_test aeon_batch33_test aeon_batch34_test aeon_batch35_test aeon_batch36_test aeon_batch37_test aeon_batch38_test aeon_batch39_test aeon_batch40_test aeon_batch41_test aeon_batch42_test aeon_batch43_test
 	./aeon_batch31_test
 	./aeon_batch32_test
 	./aeon_batch33_test
@@ -13,6 +15,9 @@ test: aeon_batch31_test aeon_batch32_test aeon_batch33_test aeon_batch34_test ae
 	./aeon_batch38_test
 	./aeon_batch39_test
 	./aeon_batch40_test
+	./aeon_batch41_test
+	./aeon_batch42_test
+	./aeon_batch43_test
 
 aeon_batch31_test: core/aeon_identity.c core/aeon_identity_crypto.c core/aeon_syscall.c core/aeon_friction.c core/aeon_io_gate.c core/aeon_process_gate.c core/aeon_ebpf_boundary.c core/aeon_kernel_device.c core/aeon_net_policy.c core/aeon_kernel_adapter.c core/aeon_semantic_frame.c core/aeon_semantic_gate.c tests/test_batch31.c
 	$(CC) $(CFLAGS) $^ -o $@ $(LDLIBS)
@@ -44,5 +49,14 @@ aeon_batch39_test: core/aeon_model_stream.c core/aeon_nvme_queue_read.c tests/te
 aeon_batch40_test: core/aeon_model_stream.c core/aeon_nvme_queue_read.c tests/test_batch40.c
 	$(CC) $(CFLAGS) $^ -o $@ $(LDLIBS)
 
+aeon_batch41_test: core/aeon_model_stream.c core/aeon_nvme_queue_read.c tests/test_batch41.c
+	$(CC) $(CFLAGS) $^ -o $@ $(LDLIBS)
+
+aeon_batch42_test: core/aeon_model_index.c tests/test_batch42.c
+	$(CC) $(CFLAGS) $^ -o $@ $(LDLIBS)
+
+aeon_batch43_test: core/aeon_model_index.c core/aeon_model_stream.c core/aeon_model_manifest.c tests/test_batch43.c
+	$(CC) $(CFLAGS) $^ -o $@ $(LDLIBS)
+
 clean:
-	rm -f aeon_batch31_test aeon_batch32_test aeon_batch33_test aeon_batch34_test aeon_batch35_test aeon_batch36_test aeon_batch37_test aeon_batch38_test aeon_batch39_test aeon_batch40_test
+	rm -f aeon_batch31_test aeon_batch32_test aeon_batch33_test aeon_batch34_test aeon_batch35_test aeon_batch36_test aeon_batch37_test aeon_batch38_test aeon_batch39_test aeon_batch40_test aeon_batch41_test aeon_batch42_test aeon_batch43_test
