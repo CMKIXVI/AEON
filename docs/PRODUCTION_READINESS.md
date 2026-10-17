@@ -1,34 +1,40 @@
-# AEON Batch 33
+# AEON Batch 34
 
-Runtime memory foundation for native model-runtime and cognitive-execution components.
+Native tensor/buffer runtime layer built on the bounded runtime-memory substrate.
 
 Verified:
 - Batch 31 authenticated semantic transmission remains passing
 - Batch 32 deterministic semantic wire transport and ABI hardening remain passing
-- versioned runtime-memory ABI
-- explicit memory-region state
-- power-of-two alignment validation
-- overflow-safe bounded allocation
-- reset/reuse lifecycle
-- available-capacity reporting
-- strict C11, warnings-as-errors Batch 33 validation
+- Batch 33 runtime memory foundation remains passing
+- versioned tensor ABI
+- F32/BF16/F16/I8/I16/I32 dtype sizing
+- rank/shape validation
+- overflow-safe element and byte sizing
+- contiguous row-major stride calculation
+- tensor storage binding to runtime memory
+- tensor validation and zeroing lifecycle
+- strict C11, warnings-as-errors Batch 34 validation
 
-Validation command used for the Batch 33 allocator/test pair:
+Validation command for the Batch 34 layer:
 
 `cc -std=c11 -Wall -Wextra -Wpedantic -Werror -O2`
 
 Result:
 
-`AEON Batch 33 runtime memory test: PASS`
+`AEON Batch 34 tensor buffer test: PASS`
 
 Not claimed:
+- tokenizer or model loader
+- model inference execution
+- SIMD/AVX/AMX tensor kernels
+- GPU/NPU accelerator execution
 - physical page allocator / PMM
 - physical VMM integration
 - IOMMU/DMA mapping
 - NUMA-aware allocation
 - physical kernel/eBPF/netfilter attachment
-- physical packet interception
+- hardware packet interception
 - kernel-space cryptographic execution
 - biological-humanity proof from cryptography alone
 
-Production readiness: 76%
+Production readiness: 78%
