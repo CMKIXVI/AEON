@@ -1,22 +1,23 @@
-# AEON Batch 31
+# AEON Batch 32
 
-Authenticated semantic transmission and cryptographic gate integration.
+Deterministic semantic wire transport and ABI hardening.
 
 Verified:
-- authenticated semantic frame ABI
-- DID + Ed25519 signature binding
-- VC hash presence
-- Proof-of-Friction challenge/attestation binding
-- IPFS reference presence
-- SHA-256 semantic integrity validation
-- tampered semantic payload rejection
-- network pre-TX ACCEPT/DROP enforcement
+- Batch 31 authenticated semantic transmission remains passing
+- deterministic semantic frame wire encoding
+- explicit wire magic and version
+- big-endian integer representation
+- bounded length-prefixed strings
+- decode rejects malformed/truncated/extra bytes
+- round-trip preservation of authenticated frame fields
+- process-gate ABI conversion without unsafe struct casting
 - strict C11, warnings-as-errors build and test
 
 Not claimed:
 - physical kernel/eBPF/netfilter attachment
 - physical packet interception
 - kernel-space cryptographic execution
+- hardware network validation
 - biological-humanity proof from cryptography alone
 
-Production readiness: 72%
+Production readiness: 74%
