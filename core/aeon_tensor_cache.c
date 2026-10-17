@@ -66,11 +66,19 @@ static int aeon_tensor_cache_select_slot(const aeon_tensor_cache_t *cache,
     }
 }
 
+static int aeon_tensor_cache_fits(const aeon_tensor_cache_t *cache, size_t bytes)
+{
+    if (cache == NULL) return 0;
+    if (bytes > cache->budget_bytes) return 0;
+    return cache->stats.bytes_used <= cache->budget_bytes - bytes;
+}
+
 int aeon_tensor_cache_init(aeon_tensor_cache_t *cache)
 {
     if (cache == NULL) return -1;
     *cache = (aeon_tensor_cache_t){0};
     cache->policy = AEON_TENSOR_CACHE_POLICY_LRU;
+    cache->budget_bytes = AEON_TENSOR_CACHE_UNLIMITED_BUDGET;
     return 0;
 }
 
@@ -84,6 +92,7 @@ int aeon_tensor_cache_reset(aeon_tensor_cache_t *cache)
     cache->clock = 0u;
     cache->stats = (aeon_tensor_cache_stats_t){0};
     cache->policy = AEON_TENSOR_CACHE_POLICY_LRU;
+    cache->budget_bytes = AEON_TENSOR_CACHE_UNLIMITED_BUDGET;
     return 0;
 }
 
@@ -100,6 +109,20 @@ aeon_tensor_cache_policy_t aeon_tensor_cache_get_policy(const aeon_tensor_cache_
 {
     if (cache == NULL) return AEON_TENSOR_CACHE_POLICY_LRU;
     return cache->policy;
+}
+
+int aeon_tensor_cache_set_budget(aeon_tensor_cache_t *cache, size_t budget_bytes)
+{
+    if (cache == NULL) return -1;
+    if (budget_bytes < cache->stats.bytes_used) return -2;
+    cache->budget_bytes = budget_bytes;
+    return 0;
+}
+
+size_t aeon_tensor_cache_get_budget(const aeon_tensor_cache_t *cache)
+{
+    if (cache == NULL) return 0u;
+    return cache->budget_bytes;
 }
 
 const aeon_tensor_cache_entry_t *aeon_tensor_cache_find(
@@ -128,7 +151,6 @@ int aeon_tensor_cache_put(aeon_tensor_cache_t *cache,
 {
     unsigned slot;
     unsigned evicting;
-    size_t previous_bytes = 0u;
 
     if (cache == NULL || materialization == NULL ||
         aeon_tensor_materialization_validate(materialization) != 0) return -1;
@@ -136,16 +158,23 @@ int aeon_tensor_cache_put(aeon_tensor_cache_t *cache,
         (void)aeon_tensor_cache_access(cache, materialization->tensor);
         return 0;
     }
+    if (materialization->bytes > cache->budget_bytes) return -3;
 
-    if (aeon_tensor_cache_select_slot(cache, &slot, &evicting) != 0) return -2;
-    if (evicting != 0u) {
-        previous_bytes = cache->entries[slot].bytes;
-        cache->stats.evictions++;
-        if (cache->stats.bytes_used >= previous_bytes) {
-            cache->stats.bytes_used -= previous_bytes;
+    while (!aeon_tensor_cache_fits(cache, materialization->bytes)) {
+        if (aeon_tensor_cache_select_slot(cache, &slot, &evicting) != 0 || evicting == 0u) {
+            return -4;
+        }
+        if (cache->stats.bytes_used >= cache->entries[slot].bytes) {
+            cache->stats.bytes_used -= cache->entries[slot].bytes;
         } else {
             cache->stats.bytes_used = 0u;
         }
+        cache->stats.evictions++;
+        cache->entries[slot] = (aeon_tensor_cache_entry_t){0};
+    }
+
+    if (aeon_tensor_cache_select_slot(cache, &slot, &evicting) != 0 || evicting != 0u) {
+        return -5;
     }
     cache->entries[slot].materialization = materialization;
     cache->entries[slot].tensor = materialization->tensor;
