@@ -45,6 +45,8 @@ int aeon_nvme_queue_read_init(aeon_nvme_queue_read_t *reader,
 int aeon_nvme_queue_read_request(aeon_nvme_queue_read_t *reader,
                                  aeon_nvme_queue_read_request_t *request,
                                  size_t offset, void *buffer, size_t length);
+int aeon_nvme_queue_read_model_read(void *context, size_t offset,
+                                    void *buffer, size_t length);
 int aeon_nvme_queue_read_bind_stream(aeon_model_stream_t *stream,
                                      aeon_nvme_queue_read_t *reader);
 
