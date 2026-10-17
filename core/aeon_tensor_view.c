@@ -70,8 +70,9 @@ int aeon_tensor_view_validate(const aeon_tensor_view_t *view,
                               const aeon_tensor_t *owner)
 {
     size_t elements;
-    size_t span = 0u;
-    size_t last;
+    size_t span_elements = 1u;
+    size_t axis_span;
+    size_t span_bytes;
     size_t item_size;
     uint8_t i;
     if (!view || !owner || aeon_tensor_validate(owner) != 0 ||
@@ -81,13 +82,16 @@ int aeon_tensor_view_validate(const aeon_tensor_view_t *view,
         !view->data) return -1;
     item_size = aeon_tensor_dtype_size(view->dtype);
     if (item_size == 0u || view_shape_elements(view, &elements) != 0 ||
-        elements != view->elements || view->bytes != elements * item_size) return -2;
+        elements != view->elements || checked_mul(elements, item_size, &span_bytes) != 0 ||
+        view->bytes != span_bytes) return -2;
     for (i = 0u; i < view->rank; ++i) {
-        if (view->shape[i] > 1u && checked_mul(view->shape[i] - 1u, view->stride[i], &last) != 0) return -3;
-        else if (view->shape[i] > 1u && checked_add(span, last, &span) != 0) return -4;
+        if (view->shape[i] > 1u &&
+            checked_mul(view->shape[i] - 1u, view->stride[i], &axis_span) != 0) return -3;
+        if (view->shape[i] > 1u &&
+            checked_add(span_elements, axis_span, &span_elements) != 0) return -4;
     }
-    if (checked_mul(span + 1u, item_size, &span) != 0 ||
-        view->byte_offset > owner->bytes || span > owner->bytes - view->byte_offset) return -5;
+    if (checked_mul(span_elements, item_size, &span_bytes) != 0 ||
+        view->byte_offset > owner->bytes || span_bytes > owner->bytes - view->byte_offset) return -5;
     return 0;
 }
 
@@ -95,13 +99,14 @@ size_t aeon_tensor_view_offset_elements(const aeon_tensor_view_t *view,
                                         const size_t *indices)
 {
     size_t offset = 0u;
+    size_t term;
     uint8_t i;
     if (!view || !indices || view->magic != AEON_TENSOR_VIEW_MAGIC ||
         view->version != AEON_TENSOR_VIEW_VERSION) return SIZE_MAX;
     for (i = 0u; i < view->rank; ++i) {
-        if (indices[i] >= view->shape[i] || indices[i] > SIZE_MAX / (view->stride[i] ? view->stride[i] : 1u)) return SIZE_MAX;
-        if (indices[i] != 0u && offset > SIZE_MAX - indices[i] * view->stride[i]) return SIZE_MAX;
-        offset += indices[i] * view->stride[i];
+        if (indices[i] >= view->shape[i] ||
+            checked_mul(indices[i], view->stride[i], &term) != 0 ||
+            checked_add(offset, term, &offset) != 0) return SIZE_MAX;
     }
     return offset;
 }
