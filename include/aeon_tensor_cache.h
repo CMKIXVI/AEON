@@ -6,6 +6,7 @@
 #include "aeon_tensor_cache_policy.h"
 
 #define AEON_TENSOR_CACHE_MAX_ENTRIES 4u
+#define AEON_TENSOR_CACHE_UNLIMITED_BUDGET ((size_t)-1)
 
 typedef struct {
     size_t hits;
@@ -30,6 +31,7 @@ struct aeon_tensor_cache {
     unsigned clock;
     aeon_tensor_cache_stats_t stats;
     aeon_tensor_cache_policy_t policy;
+    size_t budget_bytes;
 };
 
 int aeon_tensor_cache_init(aeon_tensor_cache_t *cache);
@@ -48,5 +50,7 @@ int aeon_tensor_cache_record_stale(aeon_tensor_cache_t *cache);
 int aeon_tensor_cache_set_policy(aeon_tensor_cache_t *cache,
                                  aeon_tensor_cache_policy_t policy);
 aeon_tensor_cache_policy_t aeon_tensor_cache_get_policy(const aeon_tensor_cache_t *cache);
+int aeon_tensor_cache_set_budget(aeon_tensor_cache_t *cache, size_t budget_bytes);
+size_t aeon_tensor_cache_get_budget(const aeon_tensor_cache_t *cache);
 
 #endif
