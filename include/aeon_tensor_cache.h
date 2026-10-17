@@ -13,6 +13,8 @@ typedef struct {
     size_t inserts;
     size_t evictions;
     size_t stale_entries;
+    size_t bytes_used;
+    size_t peak_bytes_used;
 } aeon_tensor_cache_stats_t;
 
 typedef struct {
@@ -43,5 +45,8 @@ int aeon_tensor_cache_detach(aeon_tensor_cache_t *cache,
 int aeon_tensor_cache_get_stats(const aeon_tensor_cache_t *cache,
                                 aeon_tensor_cache_stats_t *stats);
 int aeon_tensor_cache_record_stale(aeon_tensor_cache_t *cache);
+int aeon_tensor_cache_set_policy(aeon_tensor_cache_t *cache,
+                                 aeon_tensor_cache_policy_t policy);
+aeon_tensor_cache_policy_t aeon_tensor_cache_get_policy(const aeon_tensor_cache_t *cache);
 
 #endif
