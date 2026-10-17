@@ -31,16 +31,14 @@ int aeon_nvme_queue_read_init(aeon_nvme_queue_read_t *reader,
     return 0;
 }
 
-int aeon_nvme_queue_read_request(aeon_nvme_queue_read_t *reader,
-                                 aeon_nvme_queue_read_request_t *request,
-                                 size_t offset, void *buffer, size_t length)
+int aeon_nvme_queue_read_start(aeon_nvme_queue_read_t *reader,
+                               aeon_nvme_queue_read_request_t *request,
+                               size_t offset, void *buffer, size_t length)
 {
     size_t end;
     size_t lba_count_size;
     uint64_t lba;
     uint16_t cid = 0u;
-    int completed = 0;
-    int success = 0;
 
     if (reader == NULL || request == NULL || buffer == NULL || length == 0u ||
         offset % reader->lba_bytes != 0u || length % reader->lba_bytes != 0u ||
@@ -61,6 +59,7 @@ int aeon_nvme_queue_read_request(aeon_nvme_queue_read_t *reader,
     request->offset = offset;
     request->length = length;
     request->state = AEON_NVME_READ_IDLE;
+    request->buffer = buffer;
 
     if (reader->submit(reader->context, lba, (uint32_t)lba_count_size,
                        buffer, length, &cid) != 0) {
@@ -70,15 +69,47 @@ int aeon_nvme_queue_read_request(aeon_nvme_queue_read_t *reader,
 
     request->cid = cid;
     request->state = AEON_NVME_READ_SUBMITTED;
+    return 0;
+}
 
-    if (reader->poll(reader->context, cid, &completed, &success) != 0 ||
-        completed == 0) {
-        request->state = AEON_NVME_READ_FAILED;
+int aeon_nvme_queue_read_complete(aeon_nvme_queue_read_t *reader,
+                                  aeon_nvme_queue_read_request_t *request)
+{
+    int completed = 0;
+    int success = 0;
+
+    if (reader == NULL || request == NULL ||
+        request->magic != AEON_NVME_QUEUE_READ_MAGIC ||
+        request->version != AEON_NVME_QUEUE_READ_VERSION ||
+        request->state != AEON_NVME_READ_SUBMITTED) {
         return -1;
     }
 
-    request->state = success != 0 ? AEON_NVME_READ_COMPLETE : AEON_NVME_READ_FAILED;
+    if (reader->poll(reader->context, request->cid,
+                     &completed, &success) != 0) {
+        return -1;
+    }
+
+    if (completed == 0) {
+        return 1;
+    }
+
+    request->state = success != 0 ? AEON_NVME_READ_COMPLETE
+                                  : AEON_NVME_READ_FAILED;
     return success != 0 ? 0 : -1;
+}
+
+int aeon_nvme_queue_read_request(aeon_nvme_queue_read_t *reader,
+                                 aeon_nvme_queue_read_request_t *request,
+                                 size_t offset, void *buffer, size_t length)
+{
+    int rc = aeon_nvme_queue_read_start(reader, request, offset, buffer, length);
+    if (rc != 0) {
+        return rc;
+    }
+
+    rc = aeon_nvme_queue_read_complete(reader, request);
+    return rc == 1 ? -1 : rc;
 }
 
 int aeon_nvme_queue_read_model_read(void *context, size_t offset,
