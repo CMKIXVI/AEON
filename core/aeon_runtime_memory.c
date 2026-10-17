@@ -1,5 +1,6 @@
 #include "aeon_runtime_memory.h"
 #include <stdint.h>
+#include <stddef.h>
 
 static int power_of_two(size_t x)
 {
@@ -14,14 +15,11 @@ static uintptr_t align_up(uintptr_t value, size_t alignment)
 
 int aeon_runtime_memory_validate(const aeon_runtime_memory_t *m)
 {
-    uintptr_t end;
     if (!m || m->magic != AEON_RUNTIME_MEMORY_MAGIC ||
         m->version != AEON_RUNTIME_MEMORY_VERSION ||
         !power_of_two(m->alignment) || m->region.size == 0 ||
         m->region.used > m->region.size) return -1;
     if (m->region.base > UINTPTR_MAX - m->region.size) return -2;
-    end = m->region.base + m->region.size;
-    (void)end;
     if (m->region.state != AEON_MEMORY_ACTIVE) return -3;
     return 0;
 }
