@@ -2,12 +2,13 @@ CC ?= cc
 CFLAGS ?= -std=c11 -Wall -Wextra -Wpedantic -Werror -O2 -Iinclude
 LDLIBS ?= -lcrypto
 all: test
-test: aeon_batch31_test aeon_batch32_test aeon_batch33_test aeon_batch34_test aeon_batch35_test
+test: aeon_batch31_test aeon_batch32_test aeon_batch33_test aeon_batch34_test aeon_batch35_test aeon_batch36_test
 	./aeon_batch31_test
 	./aeon_batch32_test
 	./aeon_batch33_test
 	./aeon_batch34_test
 	./aeon_batch35_test
+	./aeon_batch36_test
 
 aeon_batch31_test: core/aeon_identity.c core/aeon_identity_crypto.c \
 	core/aeon_syscall.c core/aeon_friction.c core/aeon_io_gate.c \
@@ -33,5 +34,8 @@ aeon_batch34_test: core/aeon_runtime_memory.c core/aeon_tensor.c tests/test_batc
 aeon_batch35_test: core/aeon_runtime_memory.c core/aeon_tensor.c core/aeon_tensor_view.c tests/test_batch35.c
 	$(CC) $(CFLAGS) $^ -o $@ $(LDLIBS)
 
+aeon_batch36_test: core/aeon_model_stream.c tests/test_batch36.c
+	$(CC) $(CFLAGS) $^ -o $@ $(LDLIBS)
+
 clean:
-	rm -f aeon_batch31_test aeon_batch32_test aeon_batch33_test aeon_batch34_test aeon_batch35_test
+	rm -f aeon_batch31_test aeon_batch32_test aeon_batch33_test aeon_batch34_test aeon_batch35_test aeon_batch36_test
