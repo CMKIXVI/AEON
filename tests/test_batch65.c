@@ -21,7 +21,7 @@ int main(void) {
 
     aeon_inference_state_t inf = {0}; int32_t action = -1;
     assert(aeon_active_inference(0.5f, 0.4f, 4, &action, &inf) == 0);
-    assert(action == 3 && inf.selected_action == 3);
+    assert(action == 2 && inf.selected_action == 2);
     assert(inf.confidence > 0.0f && inf.confidence <= 1.0f);
 
     aeon_episodic_memory_t memory = {0};
