@@ -4,7 +4,7 @@ LDLIBS ?= -lcrypto
 
 all: test
 
-test: aeon_batch31_test aeon_batch32_test aeon_batch33_test aeon_batch34_test aeon_batch35_test aeon_batch36_test aeon_batch37_test aeon_batch38_test aeon_batch39_test aeon_batch40_test aeon_batch41_test aeon_batch42_test aeon_batch43_test aeon_batch44_test aeon_batch45_test aeon_batch46_test aeon_batch47_test aeon_batch49_test aeon_batch50_test aeon_batch51_test aeon_batch52_test aeon_batch53_test aeon_batch55_test aeon_batch56_test aeon_batch57_test aeon_batch58_test aeon_batch59_test aeon_batch60_test aeon_batch64_test aeon_batch65_test
+test: aeon_batch31_test aeon_batch32_test aeon_batch33_test aeon_batch34_test aeon_batch35_test aeon_batch36_test aeon_batch37_test aeon_batch38_test aeon_batch39_test aeon_batch40_test aeon_batch41_test aeon_batch42_test aeon_batch43_test aeon_batch44_test aeon_batch45_test aeon_batch46_test aeon_batch47_test aeon_batch49_test aeon_batch50_test aeon_batch51_test aeon_batch52_test aeon_batch53_test aeon_batch55_test aeon_batch56_test aeon_batch57_test aeon_batch58_test aeon_batch59_test aeon_batch60_test aeon_batch64_test aeon_batch65_test aeon_batch66_test
 	./aeon_batch31_test
 	./aeon_batch32_test
 	./aeon_batch33_test
@@ -35,6 +35,7 @@ test: aeon_batch31_test aeon_batch32_test aeon_batch33_test aeon_batch34_test ae
 	./aeon_batch60_test
 	./aeon_batch64_test
 	./aeon_batch65_test
+	./aeon_batch66_test
 
 aeon_batch31_test: core/aeon_identity.c core/aeon_identity_crypto.c core/aeon_syscall.c core/aeon_friction.c core/aeon_io_gate.c core/aeon_process_gate.c core/aeon_ebpf_boundary.c core/aeon_kernel_device.c core/aeon_net_policy.c core/aeon_kernel_adapter.c core/aeon_semantic_frame.c core/aeon_semantic_gate.c tests/test_batch31.c
 	$(CC) $(CFLAGS) $^ -o $@ $(LDLIBS)
@@ -126,5 +127,8 @@ aeon_batch64_test: core/aeon_transformer_compute.c tests/test_batch64.c
 aeon_batch65_test: core/aeon_cognitive_engine.c tests/test_batch65.c
 	$(CC) $(CFLAGS) $^ -o $@ $(LDLIBS) -lm
 
+aeon_batch66_test: core/aeon_system_embodiment.c tests/test_batch66.c
+	$(CC) $(CFLAGS) $^ -o $@ $(LDLIBS) -lm
+
 clean:
-	rm -f aeon_batch31_test aeon_batch32_test aeon_batch33_test aeon_batch34_test aeon_batch35_test aeon_batch36_test aeon_batch37_test aeon_batch38_test aeon_batch39_test aeon_batch40_test aeon_batch41_test aeon_batch42_test aeon_batch43_test aeon_batch44_test aeon_batch45_test aeon_batch46_test aeon_batch47_test aeon_batch49_test aeon_batch50_test aeon_batch51_test aeon_batch52_test aeon_batch53_test aeon_batch55_test aeon_batch56_test aeon_batch57_test aeon_batch58_test aeon_batch59_test aeon_batch60_test aeon_batch64_test aeon_batch65_test
+	rm -f aeon_batch31_test aeon_batch32_test aeon_batch33_test aeon_batch34_test aeon_batch35_test aeon_batch36_test aeon_batch37_test aeon_batch38_test aeon_batch39_test aeon_batch40_test aeon_batch41_test aeon_batch42_test aeon_batch43_test aeon_batch44_test aeon_batch45_test aeon_batch46_test aeon_batch47_test aeon_batch49_test aeon_batch50_test aeon_batch51_test aeon_batch52_test aeon_batch53_test aeon_batch55_test aeon_batch56_test aeon_batch57_test aeon_batch58_test aeon_batch59_test aeon_batch60_test aeon_batch64_test aeon_batch65_test aeon_batch66_test
