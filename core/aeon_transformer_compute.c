@@ -35,7 +35,7 @@ int aeon_rope(float *q,float *k,size_t heads,size_t head_dim,size_t position){
 
 int aeon_attention(const float *q,const float *k,const float *v,size_t tokens,size_t dim,float scale,float *out){
     if(!q||!k||!v||!out||!tokens||!dim||scale<=0.0f)return -1;
-    float *scores=(float *)__builtin_alloca(tokens*sizeof(float));
+    float scores[tokens];
     for(size_t t=0;t<tokens;t++){
         float a=0.0f; for(size_t d=0;d<dim;d++) a+=q[d]*k[t*dim+d];
         scores[t]=a*scale;
