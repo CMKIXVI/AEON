@@ -1,0 +1,13 @@
+CC ?= cc
+CFLAGS ?= -std=c11 -Wall -Wextra -Wpedantic -Werror -O2 -Iinclude
+
+.PHONY: test clean
+
+test: aeon_batch67_test
+	./aeon_batch67_test
+
+aeon_batch67_test: core/aeon_runtime.c core/aeon_cognitive_engine.c core/aeon_transformer_compute.c core/aeon_system_embodiment.c tests/test_batch67.c
+	$(CC) $(CFLAGS) $^ -o $@ -lm
+
+clean:
+	rm -f aeon_batch67_test
